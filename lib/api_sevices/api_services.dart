@@ -1,25 +1,23 @@
 import 'dart:convert';
-
 import 'package:flutter_news_app/model/newa_model.dart';
 import 'package:http/http.dart'as http;
 class ApiServices{
  bool _isLoading=false;
- String url="http://www.mocky.io/v2/5ecfddf13200006600e3d6d0";
 
- Future<List<NewsModel>> getNews()async{
 
+ Future<List<NewsModel>> getNews(String url)async{
+   final response=await http.get(Uri.parse(url));
+   List<NewsModel> news=[];
    try{
      _isLoading=true;
-     final response=await http.get(Uri.parse(url));
      if(response.statusCode==200){
-
-       var data= response.body;
-       var jsonData=json.decode(data);
-
-       return jsonData;
-     }else{
-       return json.decode(response.body);
+       var jsonNotes=json.decode(response.body);
+       print(jsonNotes);
+       for(var note  in jsonNotes){
+         news.add(NewsModel.fromJson(note));
+       }
      }
+     return news;
    }catch(e){
      _isLoading=false;
      throw Exception();
