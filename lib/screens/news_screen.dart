@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_news_app/api_sevices/api_services.dart';
 import 'package:flutter_news_app/constants.dart';
 import 'package:flutter_news_app/model/newa_model.dart';
+import 'package:flutter_news_app/screens/news_detaisl_screen.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class NewsScreen extends StatefulWidget {
+  const NewsScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<NewsScreen> createState() => _NewsScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _NewsScreenState extends State<NewsScreen> {
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
   GlobalKey<RefreshIndicatorState>();
@@ -99,6 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   _listItem(AsyncSnapshot<List<NewsModel>> snapshot,int index) {
+    var data=snapshot.data![index];
     return Container(
       child: Padding(
         padding: const EdgeInsets.only(left: 15, right: 1, top: 1, bottom: 1),
@@ -127,13 +129,23 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: IconButton(
                       alignment: Alignment.bottomCenter,
                       onPressed: (){
-
+                       Navigator.push(context, MaterialPageRoute(builder: (context){
+                         return NewsDetailsScreen(newsModel: data,);
+                       }));
                       },
                       icon:const Icon(Icons.arrow_forward_ios,size: 16,color: Colors.black26,),
                     ),
                   ),
                 )
               ],
+            ),
+            Text(data.publisher.toString(),style: TextStyle(
+              fontSize: 17,color: Colors.grey.shade600
+            ),),
+           const SizedBox(height: 10,),
+           const Padding(
+              padding: EdgeInsets.only(bottom: 5),
+              child: Divider(color: Colors.black12,),
             )
           ],
         ),
